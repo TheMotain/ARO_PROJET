@@ -35,6 +35,8 @@ var borne_spiritueux >= 0, <= 0.05;
 var borne_huile{REGIONS} >= 0, <= 0.05;
 var borne_detaillants{CATEGORIES} >= 0, <= 0.05;
 
+var borne_sup >=0, <= 0.05;
+
 /*Variables calculées*/
 var nb_pts_vente_D1 = sum{d in DETAILLANTS} appartient_a_D1[d] * nb_pts_vente[d];
 var spiritueux_D1 = sum{d in DETAILLANTS} appartient_a_D1[d] * spiritueux[d];
@@ -60,7 +62,7 @@ minimize somme_variation_abs :
 
 /*Objectif de la question 2.2*/
 #minimize variation_max_vabs : 
-#	(à faire);
+#	borne_sup;
 
 ## Contraintes
 
@@ -91,3 +93,13 @@ subject to detaillants_par_categorie_min{c in CATEGORIES} :
 
 subject to detaillants_par_categorie_max{c in CATEGORIES} : 
 	rapport_detaillants_D1[c] <= 0.40 + borne_detaillants[c];
+
+/*Contraintes liées à la borne supérieure*/
+subject to borne_sup_1 : 
+	borne_sup >= borne_nb_pts_vente;
+subject to borne_sup_2 : 
+	borne_sup >= borne_spiritueux;
+subject to borne_sup_3{r in REGIONS} : 
+	borne_sup >= borne_huile[r];
+subject to borne_sup_4{c in CATEGORIES} : 
+	borne_sup >= borne_detaillants[c];
