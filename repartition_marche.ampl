@@ -57,7 +57,7 @@ var somme_bornes = borne_nb_pts_vente + borne_spiritueux + sum{r in REGIONS} bor
 #	1;
 
 /*Objectif de la question 2.1*/
-minimize somme_variation_abs : 
+minimize somme_variation_vabs : 
 	somme_bornes;	
 
 /*Objectif de la question 2.2*/
