@@ -32,8 +32,8 @@ var appartient_a_D1{DETAILLANTS} binary;
 
 var borne_nb_pts_vente >= 0, <= 0.05;
 var borne_spiritueux >= 0, <= 0.05;
-var borne_huile_par_region >= 0, <= 0.05;
-var borne_detaillants_par_categorie >= 0, <= 0.05;
+var borne_huile{REGIONS} >= 0, <= 0.05;
+var borne_detaillants{CATEGORIES} >= 0, <= 0.05;
 
 /*Variables calculées*/
 var nb_pts_vente_D1 = sum{d in DETAILLANTS} appartient_a_D1[d] * nb_pts_vente[d];
@@ -46,6 +46,8 @@ var rapport_spiritueux_D1 = spiritueux_D1 / spiritueux_total;
 var rapport_huile_D1{r in REGIONS} = huile_D1[r] / huile_total[r];
 var rapport_detaillants_D1{c in CATEGORIES} = detaillants_D1[c] / detaillants_total[c];
 
+var somme_bornes = borne_nb_pts_vente + borne_spiritueux + sum{r in REGIONS} borne_huile[r] + sum{c in CATEGORIES} borne_detaillants[c];
+
 ## Objectif
 
 /*Objectif de la question 1*/
@@ -54,7 +56,7 @@ var rapport_detaillants_D1{c in CATEGORIES} = detaillants_D1[c] / detaillants_to
 
 /*Objectif de la question 2.1*/
 minimize somme_variation_abs : 
-	borne_nb_pts_vente + borne_spiritueux + borne_huile_par_region + borne_detaillants_par_categorie;	
+	somme_bornes;	
 
 /*Objectif de la question 2.2*/
 #minimize variation_max_vabs : 
@@ -78,14 +80,14 @@ subject to spiritueux_max :
 
 /*Contraintes liées au marché de l'huile par région de la division D1*/
 subject to huile__par_region_min{r in REGIONS} : 
-	rapport_huile_D1[r] >= 0.40 - borne_huile_par_region;
+	rapport_huile_D1[r] >= 0.40 - borne_huile[r];
 
 subject to huile_par_region_max{r in REGIONS} : 
-	rapport_huile_D1[r] <= 0.40 + borne_huile_par_region;
+	rapport_huile_D1[r] <= 0.40 + borne_huile[r];
 
 /*Contraintes liées au nombre de détaillants par catégorie de la division D1*/
 subject to detaillants_par_categorie_min{c in CATEGORIES} : 
-	rapport_detaillants_D1[c] >= 0.40 - borne_detaillants_par_categorie;
+	rapport_detaillants_D1[c] >= 0.40 - borne_detaillants[c];
 
 subject to detaillants_par_categorie_max{c in CATEGORIES} : 
-	rapport_detaillants_D1[c] <= 0.40 + borne_detaillants_par_categorie;
+	rapport_detaillants_D1[c] <= 0.40 + borne_detaillants[c];
