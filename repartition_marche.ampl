@@ -1,7 +1,7 @@
 /*Réinitialisation*/ 
 reset;
 
-/*Choix du Solver*/
+/*Choix du solveur*/
 option solver gurobi;
 
 ## Déclaration des ensembles
@@ -19,7 +19,7 @@ param nb_pts_vente{DETAILLANTS} >= 0;
 param spiritueux{DETAILLANTS} >= 0;
 param categorie{DETAILLANTS} symbolic in CATEGORIES;
 
-/*Paramètres calculés*/
+/*Paramètres intermédiaires*/
 param nb_pts_vente_total = sum{d in DETAILLANTS} nb_pts_vente[d];
 param spiritueux_total = sum{d in DETAILLANTS} spiritueux[d];
 param huile_total{r in REGIONS} = sum{d in DETAILLANTS : region[d] = r} huile[d];
@@ -37,7 +37,7 @@ var borne_detaillants{CATEGORIES} >= 0, <= 0.05;
 
 var borne_sup >=0, <= 0.05;
 
-/*Variables calculées*/
+/*Variables intermédiaires*/
 var nb_pts_vente_D1 = sum{d in DETAILLANTS} appartient_a_D1[d] * nb_pts_vente[d];
 var spiritueux_D1 = sum{d in DETAILLANTS} appartient_a_D1[d] * spiritueux[d];
 var huile_D1{r in REGIONS} = sum{d in DETAILLANTS : region[d] = r} appartient_a_D1[d] * huile[d];
